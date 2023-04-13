@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Startup : MonoBehaviour
+namespace AgarMirror
 {
-    // Start is called before the first frame update
-    void Start()
+    public static class Startup
     {
-        
-    }
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void Initialize()
+        {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+#if UNITY_EDITOR
+            Debug.Log($"{nameof(Startup)}: {nameof(Initialize)}()");
+#endif
+        }
     }
 }
+

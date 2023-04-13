@@ -1,0 +1,6 @@
+{
+  "pathNetworkPrefabs": "Assets/Resources/Mirror/NetworkPrefabs",
+  "maxPlayersOnServer": 2147483647,
+  "address": "localhost",
+  "sendRate":  30
+}
