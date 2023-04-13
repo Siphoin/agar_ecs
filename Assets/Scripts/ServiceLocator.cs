@@ -1,5 +1,6 @@
 ﻿using AgarMirror.Exceptions;
 using AgarMirror.Services.Interfaces;
+using Mirror;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace AgarMirror
         private Dictionary<Type, IService> _services;
 
         private bool _initialized;
+
         public ServiceLocator()
         {
             _initialized = false;
@@ -29,8 +31,24 @@ namespace AgarMirror
                 throw new ServiceLocatorException("serice locator after initialized");
             }
 
-        
+            MirrorService mirrorService = new MirrorService();
+
+
+
+            _services.Add(typeof(MirrorService), mirrorService);
+
+            foreach (var service in _services)
+            {
+                service.Value.Initialize();
+            }
+
+
             _initialized = true;
+        }
+
+        public T GetService<T>() where T : IService
+        {
+            return (T)_services[typeof(T)];
         }
 
 

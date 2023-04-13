@@ -1,8 +1,9 @@
+using AgarMirror.Network.Interfaces;
 using Mirror;
 using System;
 using UnityEngine;
 
-public class NetworkListener : NetworkManager
+public class NetworkListener : NetworkManager, INetworkListener
 {
     public static new NetworkListener Singleton { get; private set; }
 
@@ -20,7 +21,9 @@ public class NetworkListener : NetworkManager
 
     public event Action OnClientConnection;
 
-    public event Action OnClientDisConnection;
+    public event Action OnClientDisconnection;
+
+    public event Action<NetworkConnectionToClient> OnServerDisconnection;
 
     public event Action OnNotReadyClient;
 
@@ -32,7 +35,7 @@ public class NetworkListener : NetworkManager
 
     public event Action OnClientStopped;
 
-    public event Action OnServertarted;
+    public event Action OnServerStarted;
 
     public event Action OnServerStopped;
 
@@ -43,9 +46,6 @@ public class NetworkListener : NetworkManager
     public event Action<NetworkConnectionToClient, TransportError, string> OnErrorOfServer;
 
     public event Action<TransportError, string> OnErrorOfClient;
-
-    [Header("Other Settings")]
-    [SerializeField] private bool _logging = true;
 
 
 
@@ -100,6 +100,7 @@ public class NetworkListener : NetworkManager
     {
         base.ConfigureHeadlessFrameRate();
 
+        OnConfigureHeadlessFrameRate?.Invoke();
 
     }
 
@@ -116,13 +117,21 @@ public class NetworkListener : NetworkManager
     public override void ServerChangeScene(string newSceneName)
     {
         base.ServerChangeScene(newSceneName);
+
+        OnServerChangingScene?.Invoke(newSceneName);
     }
 
 
-    public override void OnServerSceneChanged(string sceneName) { }
+    public override void OnServerSceneChanged(string sceneName)
+    {
+        OnServerChangingScene?.Invoke(sceneName);
+    }
 
 
-    public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling) { }
+    public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
+    {
+        OnClientChangingScene?.Invoke(newSceneName, sceneOperation, customHandling);
+    }
 
 
     public override void OnClientSceneChanged()
@@ -134,26 +143,41 @@ public class NetworkListener : NetworkManager
 
     #region Server System Callbacks
 
-    public override void OnServerConnect(NetworkConnectionToClient conn) { }
+    public override void OnServerConnect(NetworkConnectionToClient conn)
+    {
+        OnServerConnection?.Invoke(conn);
+    }
 
 
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
         base.OnServerReady(conn);
+
+        OnReadyServer?.Invoke(conn);
     }
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
         base.OnServerAddPlayer(conn);
+
+        OnNewPlayer?.Invoke(conn);
     }
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
     {
         base.OnServerDisconnect(conn);
+
+        OnServerDisconnection?.Invoke(conn);
+        
     }
 
 
-    public override void OnServerError(NetworkConnectionToClient conn, TransportError transportError, string message) { }
+    public override void OnServerError(NetworkConnectionToClient conn, TransportError transportError, string message)
+    {
+        Debug.LogError($"Mirror Server Error: TransportError: {transportError} Message: {message}");
+
+        OnErrorOfServer?.Invoke(conn, transportError, message);
+    }
 
     #endregion
 
@@ -162,41 +186,68 @@ public class NetworkListener : NetworkManager
     public override void OnClientConnect()
     {
         base.OnClientConnect();
+
+        OnClientConnection?.Invoke();
     }
 
 
-    public override void OnClientDisconnect() { }
+    public override void OnClientDisconnect()
+    {
+        OnClientDisconnection?.Invoke();
+    }
 
 
-    public override void OnClientNotReady() { }
+    public override void OnClientNotReady()
+    {
+        OnNotReadyClient?.Invoke();
+    }
 
-    public override void OnClientError(TransportError transportError, string message) { }
+    public override void OnClientError(TransportError transportError, string message)
+    {
+        Debug.LogError($"Mirror Client Error: TransportError: {transportError} Message: {message}");
+
+        OnErrorOfClient?.Invoke(transportError, message);
+    }
 
     #endregion
 
     #region Start & Stop Callbacks
 
 
-    public override void OnStartHost() { }
+    public override void OnStartHost()
+    {
+        OnHostStarted?.Invoke();
+    }
 
 
-    public override void OnStartServer() { }
+    public override void OnStartServer()
+    {
+        OnServerStarted?.Invoke();
+    }
 
 
-    public override void OnStartClient() { }
+    public override void OnStartClient()
+    {
+        OnClientStarted?.Invoke();
+    }
 
 
-    public override void OnStopHost() { }
+    public override void OnStopHost()
+    {
+        OnHostStopped?.Invoke();
+    }
 
 
-    public override void OnStopServer() { }
+    public override void OnStopServer()
+    {
+        OnServerStopped?.Invoke();
+    }
 
 
-    public override void OnStopClient() { }
-
-    #endregion
-
-    #region Logging
+    public override void OnStopClient() 
+    {
+        OnClientStopped?.Invoke();
+    }
 
     #endregion
 }
