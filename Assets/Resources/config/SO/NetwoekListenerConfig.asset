@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12e971d53b151e64591c5787b197ef93, type: 3}
   m_Name: NetwoekListenerConfig
   m_EditorClassIdentifier: 
-  _offlineScene: {fileID: 102900000, guid: cd53f6923ec404f4b8ac3501fd763ca5, type: 3}
-  _onlineScene: {fileID: 102900000, guid: cf086999bed21b14fb5066e28ce9bb82, type: 3}
+  _offlineScene: Assets/Scenes/Sign.unity
+  _onlineScene: Assets/Scenes/World.unity

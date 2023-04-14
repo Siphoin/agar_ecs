@@ -1,10 +1,12 @@
-﻿using System;
+﻿using UnityEngine;
 
 namespace AgarMirror
 {
-    [Serializable]
-    public class GameConfig
+    [CreateAssetMenu]
+    public class GameConfig : ScriptableObject
     {
-        public string pathNetworkPrefabs;
+      [SerializeField]  private string _pathNetworkPrefabs;
+
+        public string PathNetworkPrefabs => _pathNetworkPrefabs;
     }
 }

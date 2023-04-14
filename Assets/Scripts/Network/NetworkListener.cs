@@ -1,3 +1,4 @@
+using AgarMirror;
 using AgarMirror.Network.Interfaces;
 using Mirror;
 using System;
@@ -58,7 +59,12 @@ public class NetworkListener : NetworkManager, INetworkListener
         base.Awake();
 
         Singleton = this;
+
     }
+
+   
+
+
 
     #region Unity Callbacks
 
@@ -74,6 +80,17 @@ public class NetworkListener : NetworkManager, INetworkListener
     public override void Start()
     {
         base.Start();
+
+        if (Application.isBatchMode)
+        {
+            StartServer();
+
+        }
+
+        else
+        {
+            StartClient();
+        }
     }
 
     /// <summary>
