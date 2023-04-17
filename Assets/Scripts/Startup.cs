@@ -34,9 +34,13 @@ namespace AgarMirror
 
             _networkListenerConfig = LoadNetworkListenerConfig();
 
+            
+
             BindGameConfig(_gameConfig);
 
             BindNetworkListenerConfig(_networkListenerConfig);
+
+
 
             _serviceLocator = new ServiceLocator();
 
