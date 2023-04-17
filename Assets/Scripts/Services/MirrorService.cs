@@ -1,7 +1,11 @@
 ﻿using AgarMirror;
+using AgarMirror.Network.Interfaces;
 using AgarMirror.Network.SO;
+using AgarMirror.Repositories;
 using AgarMirror.Services.Interfaces;
 using kcp2k;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -20,27 +24,60 @@ namespace Mirror
 
             KcpTransport kcpTransport = new GameObject(nameof(KcpTransport)).AddComponent<KcpTransport>();
 
-           NetworkListener networkListener = networkObject.AddComponent<NetworkListener>();
+            NetworkListener networkListener = networkObject.AddComponent<NetworkListener>();
 
-           kcpTransport.transform.SetParent(networkObject.transform);
+            kcpTransport.transform.SetParent(networkObject.transform);
 
-           networkListener.transport = kcpTransport;
+            networkListener.transport = kcpTransport;
 
-           networkListener.dontDestroyOnLoad = true;
+            networkListener.dontDestroyOnLoad = true;
 
-           networkListener.autoConnectClientBuild = false;
+            networkListener.autoConnectClientBuild = false;
 
-           networkListener.autoStartServerBuild = false;
+            networkListener.autoStartServerBuild = false;
 
-           networkListener.autoCreatePlayer = false;
+         //   networkListener.autoCreatePlayer = false;
 
-           networkListener.maxConnections = _config.MaxPlayersOnServer;
+            networkListener.maxConnections = _config.MaxPlayersOnServer;
 
-           networkListener.networkAddress = _config.Address;
+            networkListener.networkAddress = _config.Address;
 
-           networkListener.offlineScene = _config.OfflineScene;
+            networkListener.offlineScene = _config.OfflineScene;
 
-           networkListener.onlineScene = _config.OnlineScene;
+            networkListener.onlineScene = _config.OnlineScene;
+
+#if UNITY_EDITOR
+            networkListener.timeInterpolationGui = true;
+#endif
+
+
+            if (_config.PlayerPrefab != null)
+            {
+                networkListener.playerPrefab = _config.PlayerPrefab.gameObject;
+            }
+
+            RegisterNetworkPrefabs(networkListener);
+
+            Startup.Container.BindInstance<INetworkListener>(networkListener);
+
+        }
+
+        private static void RegisterNetworkPrefabs(NetworkListener networkListener)
+        {
+            networkListener.spawnPrefabs = new List<GameObject>();
+
+            var repository = Startup.GetRepository<NetworkPrefabsRepository>();
+
+            var prefabs = repository.GetData().ToArray();
+
+            for (int i = 0; i < prefabs.Length; i++)
+            {
+                if (prefabs[i].gameObject != networkListener.playerPrefab)
+                {
+                    networkListener.spawnPrefabs.Add(prefabs[i].gameObject);
+                }
+                
+            }
         }
     }
 }

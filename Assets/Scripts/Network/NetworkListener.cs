@@ -1,4 +1,3 @@
-using AgarMirror;
 using AgarMirror.Network.Interfaces;
 using Mirror;
 using System;
@@ -6,7 +5,6 @@ using UnityEngine;
 
 public class NetworkListener : NetworkManager, INetworkListener
 {
-    public static new NetworkListener Singleton { get; private set; }
 
     public event Action OnConfigureHeadlessFrameRate;
 
@@ -58,7 +56,6 @@ public class NetworkListener : NetworkManager, INetworkListener
     {
         base.Awake();
 
-        Singleton = this;
 
     }
 
@@ -85,11 +82,6 @@ public class NetworkListener : NetworkManager, INetworkListener
         {
             StartServer();
 
-        }
-
-        else
-        {
-            StartClient();
         }
     }
 
@@ -178,6 +170,8 @@ public class NetworkListener : NetworkManager, INetworkListener
         base.OnServerAddPlayer(conn);
 
         OnNewPlayer?.Invoke(conn);
+
+        Debug.Log(nameof(OnServerAddPlayer));
     }
 
     public override void OnServerDisconnect(NetworkConnectionToClient conn)
@@ -205,12 +199,16 @@ public class NetworkListener : NetworkManager, INetworkListener
         base.OnClientConnect();
 
         OnClientConnection?.Invoke();
+
+        Debug.Log(nameof(OnClientConnect));
     }
 
 
     public override void OnClientDisconnect()
     {
         OnClientDisconnection?.Invoke();
+
+        Debug.Log(nameof(OnClientDisconnect));
     }
 
 
@@ -264,6 +262,11 @@ public class NetworkListener : NetworkManager, INetworkListener
     public override void OnStopClient() 
     {
         OnClientStopped?.Invoke();
+    }
+
+    public void Connect()
+    {
+        StartClient();
     }
 
     #endregion

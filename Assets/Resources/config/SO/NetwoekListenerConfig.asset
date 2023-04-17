@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _offlineScene: Assets/Scenes/Sign.unity
   _onlineScene: Assets/Scenes/World.unity
+  _playerPrefab: {fileID: 5119314594747661611, guid: 18aa2b9d22b59ee40b4039368560b1a3, type: 3}
+  _address: localhost
+  _sendRate: 30
+  _maxPlayersOnServer: 2147483647

@@ -1,9 +1,11 @@
-using System.ComponentModel;
 using UnityEngine;
 using Zenject;
 using System;
 using Object = UnityEngine.Object;
 using AgarMirror.Network.SO;
+using AgarMirror.Repositories;
+using AgarMirror.Services.Interfaces;
+using AgarMirror.Repositories.Interfaces;
 
 namespace AgarMirror
 {
@@ -16,6 +18,8 @@ namespace AgarMirror
         private const string NAME_FILE_NETWORK_LISTENER_CONFIG = "NetwoekListenerConfig";
 
         private static ServiceLocator _serviceLocator;
+
+        private static RepositoriesDb _repositories;
 
         private static GameConfig _gameConfig;
 
@@ -44,7 +48,13 @@ namespace AgarMirror
 
             _serviceLocator = new ServiceLocator();
 
+            _repositories = new RepositoriesDb();
+
+            _repositories.Initialize();
+
             _serviceLocator.Initialize();
+
+
 
 #if UNITY_EDITOR
             Debug.Log($"{nameof(Startup)}: {nameof(Initialize)}()");
@@ -96,6 +106,16 @@ namespace AgarMirror
 
         private static void BindNetworkListenerConfig(NetworkListenerConfig networkListenerConfig)
             => Container.BindInstance(networkListenerConfig);
+
+        public static T GetRepository<T>() where T : IRepositoryBase
+        {
+            return _repositories.GetRepository<T>();
+        }
+
+        public static T GetService<T>() where T : IService
+        {
+            return _serviceLocator.GetService<T>();
+        }
     }
 
 }

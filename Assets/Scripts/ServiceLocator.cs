@@ -18,10 +18,6 @@ namespace AgarMirror
             _initialized = false;
 
             _services = new Dictionary<Type, IService>();
-
-#if UNITY_EDITOR
-            Debug.Log("serivice locator are ready");
-#endif
         }
 
         public void Initialize()
@@ -44,6 +40,10 @@ namespace AgarMirror
 
 
             _initialized = true;
+
+#if UNITY_EDITOR
+            Debug.Log("serivice locator are ready");
+#endif
         }
 
         public T GetService<T>() where T : IService

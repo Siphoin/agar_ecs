@@ -3,7 +3,7 @@ using System;
 
 namespace AgarMirror.Network.Interfaces
 {
-    internal interface INetworkListener
+    public interface INetworkListener
     {
         event Action OnConfigureHeadlessFrameRate;
 
@@ -42,5 +42,7 @@ namespace AgarMirror.Network.Interfaces
         event Action<NetworkConnectionToClient, TransportError, string> OnErrorOfServer;
 
         event Action<TransportError, string> OnErrorOfClient;
+
+        void Connect();
     }
 }

@@ -8,43 +8,39 @@ using UnityEngine;
 
 namespace AgarMirror.Repositories
 {
-    public class NetworkPrefabsRepository : IRepository<NetworkBehaviour>
+    public class NetworkPrefabsRepository : RepositoryBase, IRepository<NetworkIdentity>
     {
 
         private const string FOLBER_PREFABS = "Mirror/NetworkPrefabs";
 
-        private readonly string _dataPath = Application.dataPath;
 
+        private List<NetworkIdentity> _networkPrefabs;
 
-        private List<NetworkBehaviour> _networkPrefabs;
+        public NetworkPrefabsRepository ()
+        {
+            _networkPrefabs = new List<NetworkIdentity>();
+        }
 
         public void Initialize()
         {
-            string[] prefabFiles = Directory.GetFiles(_dataPath + "/Resources/" + FOLBER_PREFABS, "*.prefab", SearchOption.AllDirectories); // ищем все файлы с расширением .prefab во всех вложенных папках
+            NetworkIdentity[] prefabs = Resources.LoadAll<NetworkIdentity>(FOLBER_PREFABS);
 
-            foreach (string file in prefabFiles)
+            for (int i = 0; i < prefabs.Length; i++)
             {
-                string assetPath = file.Replace("\\", "/").Replace(_dataPath, "Assets");
-
-                NetworkBehaviour prefab = Resources.Load<NetworkBehaviour>(FOLBER_PREFABS + "/" + Path.GetFileNameWithoutExtension(file));
-
-                if (prefab != null)
-                {
-                    _networkPrefabs.Add(prefab); 
-                }
+                _networkPrefabs.Add(prefabs[i]);
+            }
 
 #if UNITY_EDITOR
-                Debug.Log($"loaded {_networkPrefabs.Count} network prefabs for Mirror");
+            Debug.Log($"loaded {_networkPrefabs.Count} network prefabs for Mirror");
 #endif
             }
-        }
 
-        public IEnumerable<NetworkBehaviour> GetData()
+        public IEnumerable<NetworkIdentity> GetData()
         {
             return _networkPrefabs;
         }
 
-        public NetworkBehaviour GetNetworkObject (string name)
+        public NetworkIdentity GetNetworkObject (string name)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -52,6 +48,32 @@ namespace AgarMirror.Repositories
             }
 
             return _networkPrefabs.Single(x => x.name == name);
+        }
+
+        private List<string> GetAllFolders(string rootFolder)
+        {
+            List<string> folders = new List<string>();
+
+            // Проверяем, что указанная папка существует
+            if (!Directory.Exists(rootFolder))
+            {
+                return folders;
+            }
+
+            // Добавляем корневую папку в список
+            folders.Add(rootFolder);
+
+            // Получаем список всех подпапок в корневой папке
+            string[] subFolders = Directory.GetDirectories(rootFolder);
+
+            // Рекурсивно вызываем эту же функцию для каждой найденной папки
+            foreach (string subFolder in subFolders)
+            {
+                List<string> subFoldersList = GetAllFolders(subFolder);
+                folders.AddRange(subFoldersList);
+            }
+
+            return folders;
         }
     }
 }

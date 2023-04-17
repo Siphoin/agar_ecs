@@ -3,15 +3,17 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using System;
+using AgarMirror.UI.Forms.Interfaces;
+
 namespace AgarMirror.UI.Forms
 {
-    public class SignForm : MonoBehaviour
+    public class SignForm : MonoBehaviour, ISignForm
     {
         [SerializeField] private Button _buttonSubmit;
 
         [SerializeField] private TMP_InputField _InputFieldNickName;
 
-        [SerializeField] public UnityAction<string> OnSubmit;
+        public event UnityAction<string> OnSubmit;
 
         private void Start()
         {
@@ -35,8 +37,6 @@ namespace AgarMirror.UI.Forms
             if (!string.IsNullOrEmpty(result))
             {
                 OnSubmit?.Invoke(result);
-
-                Debug.Log(result);
             }
         }
 

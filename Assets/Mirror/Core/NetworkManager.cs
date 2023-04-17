@@ -679,7 +679,7 @@ namespace Mirror
             }
             else
             {
-                //Debug.Log("NetworkManager created singleton (ForScene)");
+                Debug.Log("NetworkManager created singleton (ForScene)");
                 singleton = this;
             }
 
