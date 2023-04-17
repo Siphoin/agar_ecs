@@ -17,22 +17,18 @@ namespace AgarMirror
 
         private static ServiceLocator _serviceLocator;
 
-        private static SceneContext _sceneContext;
-
         private static GameConfig _gameConfig;
 
         private static NetworkListenerConfig _networkListenerConfig;
 
-        public static DiContainer Container => _sceneContext.Container;
+        public static DiContainer Container => ProjectContext.Container;
+
+        private static ProjectContext ProjectContext => ProjectContext.Instance;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
         {
-            _sceneContext = SceneContext.Create();
-
-            Object.DontDestroyOnLoad(_sceneContext);
-
-            _sceneContext.Install();
+            Object.DontDestroyOnLoad(ProjectContext);
             
             _gameConfig = LoadGameConfig();
 
