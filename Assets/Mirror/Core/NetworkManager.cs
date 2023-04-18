@@ -154,7 +154,7 @@ namespace Mirror
         public virtual void OnValidate()
         {
             // always >= 0
-            maxConnections = Mathf.Max(maxConnections, 0);
+            maxConnections = Mathf.Max(maxConnections, 2);
 
             if (playerPrefab != null && !playerPrefab.TryGetComponent(out NetworkIdentity _))
             {

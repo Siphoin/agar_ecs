@@ -27,8 +27,12 @@ namespace AgarMirror.Repositories
 
             NetworkPrefabsRepository networkPrefabsRepository = new NetworkPrefabsRepository();
 
+            GameSessionRepository gameSessionRepository = new GameSessionRepository();
+
 
             _repositories.Add(typeof(NetworkPrefabsRepository), networkPrefabsRepository);
+
+            _repositories.Add(typeof(GameSessionRepository), gameSessionRepository);
 
             foreach (var service in _repositories)
             {

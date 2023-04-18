@@ -4,6 +4,8 @@ namespace AgarMirror.Repositories.Interfaces
 {
     public interface IRepository<T> : IRepositoryBase
     {
-        IEnumerable<T> GetData();
+        IEnumerable<T> GetEnumerable();
+
+         T GetData();
     }
 }

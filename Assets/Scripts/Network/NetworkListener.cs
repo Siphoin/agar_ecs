@@ -169,7 +169,7 @@ public class NetworkListener : NetworkManager, INetworkListener
     {
         base.OnServerAddPlayer(conn);
 
-        OnNewPlayer?.Invoke(conn);
+        OnNewPlayer?.Invoke(conn);  
 
         Debug.Log(nameof(OnServerAddPlayer));
     }
@@ -196,11 +196,16 @@ public class NetworkListener : NetworkManager, INetworkListener
 
     public override void OnClientConnect()
     {
-        base.OnClientConnect();
-
-        OnClientConnection?.Invoke();
+        if (!NetworkClient.ready)
+        {
+            NetworkClient.Ready();
+        }
+       
 
         Debug.Log(nameof(OnClientConnect));
+
+        OnClientConnection?.Invoke();
+        
     }
 
 
@@ -264,10 +269,18 @@ public class NetworkListener : NetworkManager, INetworkListener
         OnClientStopped?.Invoke();
     }
 
+
+    #endregion
+
     public void Connect()
     {
         StartClient();
     }
 
-    #endregion
+    public void Disconnect()
+    {
+        StopClient();
+    }
+
+
 }

@@ -36,7 +36,7 @@ namespace Mirror
 
             networkListener.autoStartServerBuild = false;
 
-         //   networkListener.autoCreatePlayer = false;
+            networkListener.autoCreatePlayer = false;
 
             networkListener.maxConnections = _config.MaxPlayersOnServer;
 
@@ -68,7 +68,7 @@ namespace Mirror
 
             var repository = Startup.GetRepository<NetworkPrefabsRepository>();
 
-            var prefabs = repository.GetData().ToArray();
+            var prefabs = repository.GetEnumerable().ToArray();
 
             for (int i = 0; i < prefabs.Length; i++)
             {

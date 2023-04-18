@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using System;
 using AgarMirror.UI.Forms.Interfaces;
+using AgarMirror.Repositories;
 
 namespace AgarMirror.UI.Forms
 {
@@ -27,7 +28,11 @@ namespace AgarMirror.UI.Forms
                 throw new NullReferenceException("button submit not seted");
             }
 
+            GameSessionRepository sessionRepository = Startup.GetRepository<GameSessionRepository>();
+
             _buttonSubmit.onClick.AddListener(Submit);
+
+            _InputFieldNickName.text = sessionRepository.GetData().NickName;
         }
 
         private void Submit()

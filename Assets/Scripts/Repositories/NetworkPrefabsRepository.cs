@@ -35,9 +35,14 @@ namespace AgarMirror.Repositories
 #endif
             }
 
-        public IEnumerable<NetworkIdentity> GetData()
+        public IEnumerable<NetworkIdentity> GetEnumerable()
         {
             return _networkPrefabs;
+        }
+
+        public NetworkIdentity GetData()
+        {
+            throw new NotImplementedException();
         }
 
         public NetworkIdentity GetNetworkObject (string name)

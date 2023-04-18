@@ -1,4 +1,5 @@
 ﻿using AgarMirror.Exceptions;
+using AgarMirror.Services;
 using AgarMirror.Services.Interfaces;
 using Mirror;
 using System;
@@ -29,9 +30,13 @@ namespace AgarMirror
 
             MirrorService mirrorService = new MirrorService();
 
+            SpawnService spawnService = new SpawnService();
+
 
 
             _services.Add(typeof(MirrorService), mirrorService);
+
+            _services.Add(typeof(SpawnService), spawnService);
 
             foreach (var service in _services)
             {
