@@ -6,6 +6,8 @@ using AgarMirror.Network.SO;
 using AgarMirror.Repositories;
 using AgarMirror.Services.Interfaces;
 using AgarMirror.Repositories.Interfaces;
+using AgarMirror.InputSystem;
+using AgarMirror.InputSystem.Interfaces;
 
 namespace AgarMirror
 {
@@ -25,7 +27,11 @@ namespace AgarMirror
 
         private static NetworkListenerConfig _networkListenerConfig;
 
+        private static InputListener _inputListener;
+
         public static DiContainer Container => ProjectContext.Container;
+
+        public static IInputListener Input => _inputListener;
 
         private static ProjectContext ProjectContext => ProjectContext.Instance;
 
@@ -53,6 +59,8 @@ namespace AgarMirror
             _repositories.Initialize();
 
             _serviceLocator.Initialize();
+
+            _inputListener = new InputListener();
 
 
 
