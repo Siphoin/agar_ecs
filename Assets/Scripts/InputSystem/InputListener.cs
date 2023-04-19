@@ -18,11 +18,15 @@ namespace AgarMirror.InputSystem
             return direction != Vector2.zero;
         }
 
-        public bool TryMoveWithMouse(out Vector2 direction)
+        public bool TryMoveWithMouse(Transform target, out Vector2 direction)
         {
-            direction = Camera.main.ScreenToWorldPoint(Input.mousePosition).normalized;
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-           
+            mousePosition.z = 0;
+
+            direction = (mousePosition - target.position).normalized;
+
+
             return _playerInput.Player.MoveMouse.phase == InputActionPhase.Started;
         }
 

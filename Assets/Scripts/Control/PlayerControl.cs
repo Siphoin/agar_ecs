@@ -41,11 +41,6 @@ namespace AgarMirror.Control
             OnEnable();
         }
 
-        private void OnMousePerformed(UnityEngine.InputSystem.InputAction.CallbackContext callback)
-        {
-            Debug.Log(nameof(OnMousePerformed));
-        }
-
         private void FixedUpdate()
         {
             MoveWithDirection();
@@ -72,7 +67,7 @@ namespace AgarMirror.Control
 
         private void MoveWithMouse ()
         {
-            if (_inputListener.TryMoveWithMouse(out Vector2 direction))
+            if (_inputListener.TryMoveWithMouse(transform, out Vector2 direction))
             {
                 Move(direction);
             }
