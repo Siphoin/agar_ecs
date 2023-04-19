@@ -35,6 +35,7 @@ namespace AgarMirror
 
         private static ProjectContext ProjectContext => ProjectContext.Instance;
 
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Initialize()
         {
