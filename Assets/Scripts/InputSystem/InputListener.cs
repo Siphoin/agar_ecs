@@ -20,7 +20,7 @@ namespace AgarMirror.InputSystem
 
         public bool TryMoveWithMouse(Transform target, out Vector2 direction)
         {
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
             mousePosition.z = 0;
 
