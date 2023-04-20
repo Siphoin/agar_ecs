@@ -43,9 +43,16 @@ namespace AgarMirror.Control
 
         private void FixedUpdate()
         {
-            MoveWithDirection();
+            try
+            {
+                MoveWithDirection();
 
-            MoveWithMouse();
+                MoveWithMouse();
+            }
+            catch
+            {
+
+            }
         }
 
         private void OnEnable() 
